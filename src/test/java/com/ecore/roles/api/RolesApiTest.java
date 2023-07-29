@@ -16,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Optional;
 
 import static com.ecore.roles.utils.MockUtils.mockGetTeamById;
-import static com.ecore.roles.utils.MockUtils.mockGetTeamByIdNotFound;
 import static com.ecore.roles.utils.RestAssuredHelper.createMembership;
 import static com.ecore.roles.utils.RestAssuredHelper.createRole;
 import static com.ecore.roles.utils.RestAssuredHelper.getRole;
@@ -133,7 +132,7 @@ public class RolesApiTest {
     @Test
     void shouldGetRoleByUserIdAndTeamId() {
         Membership expectedMembership = DEFAULT_MEMBERSHIP();
-        mockGetTeamById(mockServer, ORDINARY_CORAL_LYNX_TEAM_UUID, ORDINARY_CORAL_LYNX_TEAM());
+        mockGetTeamById(mockServer, expectedMembership.getTeamId(), ORDINARY_CORAL_LYNX_TEAM());
         createMembership(expectedMembership)
                 .statusCode(201);
 
@@ -156,7 +155,7 @@ public class RolesApiTest {
 
     @Test
     void shouldFailToGetRoleByUserIdAndTeamIdWhenItDoesNotExist() {
-        mockGetTeamByIdNotFound(mockServer, UUID_1, null);
+        mockGetTeamById(mockServer, UUID_1, null);
         getRole(GIANNI_USER_UUID, UUID_1)
                 .validate(404, format("Team %s not found", UUID_1));
     }

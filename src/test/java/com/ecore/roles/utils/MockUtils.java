@@ -31,28 +31,16 @@ public class MockUtils {
         }
     }
 
-    private static void mockGetTeamById(
-            MockRestServiceServer mockServer,
-            UUID teamId,
-            Team team,
-            HttpStatus status) {
+    public static void mockGetTeamById(MockRestServiceServer mockServer, UUID teamId, Team team) {
         try {
             mockServer.expect(ExpectedCount.manyTimes(), requestTo("http://test.com/teams/" + teamId))
                     .andExpect(method(HttpMethod.GET))
                     .andRespond(
-                            withStatus(status)
+                            withStatus(HttpStatus.OK)
                                     .contentType(MediaType.APPLICATION_JSON)
                                     .body(new ObjectMapper().writeValueAsString(team)));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void mockGetTeamById(MockRestServiceServer mockServer, UUID teamId, Team team) {
-        mockGetTeamById(mockServer, teamId, team, HttpStatus.OK);
-    }
-
-    public static void mockGetTeamByIdNotFound(MockRestServiceServer mockServer, UUID teamId, Team team) {
-        mockGetTeamById(mockServer, teamId, team, HttpStatus.NOT_FOUND);
     }
 }
