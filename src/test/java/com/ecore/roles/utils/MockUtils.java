@@ -33,7 +33,7 @@ public class MockUtils {
 
     public static void mockGetTeamById(MockRestServiceServer mockServer, UUID teamId, Team team) {
         try {
-            mockServer.expect(ExpectedCount.once(), requestTo("http://test.com/teams/" + teamId))
+            mockServer.expect(ExpectedCount.manyTimes(), requestTo("http://test.com/teams/" + teamId))
                     .andExpect(method(HttpMethod.GET))
                     .andRespond(
                             withStatus(HttpStatus.OK)

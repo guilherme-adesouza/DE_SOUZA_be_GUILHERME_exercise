@@ -132,7 +132,7 @@ public class RolesApiTest {
     @Test
     void shouldGetRoleByUserIdAndTeamId() {
         Membership expectedMembership = DEFAULT_MEMBERSHIP();
-        mockGetTeamById(mockServer, ORDINARY_CORAL_LYNX_TEAM_UUID, ORDINARY_CORAL_LYNX_TEAM());
+        mockGetTeamById(mockServer, expectedMembership.getTeamId(), ORDINARY_CORAL_LYNX_TEAM());
         createMembership(expectedMembership)
                 .statusCode(201);
 

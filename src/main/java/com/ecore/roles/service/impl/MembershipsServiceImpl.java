@@ -1,6 +1,8 @@
 package com.ecore.roles.service.impl;
 
 import com.ecore.roles.client.model.Team;
+import com.ecore.roles.client.model.User;
+import com.ecore.roles.exception.InvalidArgumentDependencyException;
 import com.ecore.roles.exception.InvalidArgumentException;
 import com.ecore.roles.exception.ResourceExistsException;
 import com.ecore.roles.exception.ResourceNotFoundException;
@@ -56,7 +58,10 @@ public class MembershipsServiceImpl implements MembershipsService {
         }
 
         if (!team.hasMember(m.getUserId())) {
-            throw new ResourceNotFoundException(Team.class, m.getTeamId());
+            throw new InvalidArgumentDependencyException(
+                    Membership.class,
+                    User.class.getSimpleName(),
+                    Team.class.getSimpleName());
         }
 
         roleRepository.findById(roleId).orElseThrow(() -> new ResourceNotFoundException(Role.class, roleId));
