@@ -152,7 +152,7 @@ public class MembershipsApiTests {
                 .statusCode(200)
                 .extract().as(MembershipDto[].class);
 
-        assertThat(actualMemberships.length).isEqualTo(0);
+        assertThat(actualMemberships).isEmpty();
     }
 
     @Test
