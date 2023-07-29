@@ -2,10 +2,10 @@ package com.ecore.roles.service.impl;
 
 import com.ecore.roles.exception.ResourceExistsException;
 import com.ecore.roles.exception.ResourceNotFoundException;
+import com.ecore.roles.model.Membership;
 import com.ecore.roles.model.Role;
 import com.ecore.roles.repository.MembershipRepository;
 import com.ecore.roles.repository.RoleRepository;
-import com.ecore.roles.service.MembershipsService;
 import com.ecore.roles.service.RolesService;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
@@ -23,16 +23,13 @@ public class RolesServiceImpl implements RolesService {
 
     private final RoleRepository roleRepository;
     private final MembershipRepository membershipRepository;
-    private final MembershipsService membershipsService;
 
     @Autowired
     public RolesServiceImpl(
             RoleRepository roleRepository,
-            MembershipRepository membershipRepository,
-            MembershipsService membershipsService) {
+            MembershipRepository membershipRepository) {
         this.roleRepository = roleRepository;
         this.membershipRepository = membershipRepository;
-        this.membershipsService = membershipsService;
     }
 
     @Override
@@ -54,8 +51,11 @@ public class RolesServiceImpl implements RolesService {
         return roleRepository.findAll();
     }
 
-    private Role getDefaultRole() {
-        return roleRepository.findByName(DEFAULT_ROLE)
-                .orElseThrow(() -> new IllegalStateException("Default role is not configured"));
+    @Override
+    public Role getRoleByUserIdAndTeamId(UUID userId, UUID teamId) {
+        final Membership membership = membershipRepository.findByUserIdAndTeamId(userId, teamId)
+                .orElseThrow(() -> new ResourceNotFoundException(Role.class));
+
+        return membership.getRole();
     }
 }
