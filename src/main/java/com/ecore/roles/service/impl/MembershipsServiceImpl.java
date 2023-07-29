@@ -51,7 +51,9 @@ public class MembershipsServiceImpl implements MembershipsService {
             throw new ResourceExistsException(Membership.class);
         }
 
-        roleRepository.findById(roleId).orElseThrow(() -> new ResourceNotFoundException(Role.class, roleId));
+        if (!roleRepository.existsById(roleId)) {
+            throw new ResourceNotFoundException(Role.class, roleId);
+        }
 
         final Team team = teamsService.getTeam(m.getTeamId());
 
