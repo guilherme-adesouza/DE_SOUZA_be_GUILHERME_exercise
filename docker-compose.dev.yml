@@ -1,0 +1,20 @@
+version: '3.1'
+
+services:
+  roles-api:
+    image: maven:3-jdk-11-slim
+    container_name: roles_api_dev
+    tty: true
+    stdin_open: true
+    command: bash
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - target:/app/target
+      - mvn_cache:/root/.m2
+    ports:
+      - '8080:8080'
+
+volumes:
+  target:
+  mvn_cache:
