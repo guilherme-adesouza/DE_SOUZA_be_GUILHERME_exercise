@@ -12,6 +12,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.UUID;
 
+import static java.lang.String.format;
+
 @RequiredArgsConstructor
 @Component
 public class UsersClient {
@@ -21,7 +23,7 @@ public class UsersClient {
 
     public ResponseEntity<User> getUser(UUID id) {
         return restTemplate.exchange(
-                clientsConfigurationProperties.getUsersApiHost() + "/" + id,
+                format("%s/%s", clientsConfigurationProperties.getUsersApiHost(), id),
                 HttpMethod.GET,
                 null,
                 User.class);
