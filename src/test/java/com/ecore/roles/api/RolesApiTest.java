@@ -108,8 +108,8 @@ public class RolesApiTest {
         RoleDto[] roles = getRoles()
                 .extract().as(RoleDto[].class);
 
-        assertThat(roles).hasSizeGreaterThanOrEqualTo(3);
-        assertThat(roles).contains(RoleDto.fromModel(DEVELOPER_ROLE()))
+        assertThat(roles).hasSizeGreaterThanOrEqualTo(3)
+                .contains(RoleDto.fromModel(DEVELOPER_ROLE()))
                 .contains(RoleDto.fromModel(PRODUCT_OWNER_ROLE()))
                 .contains(RoleDto.fromModel(TESTER_ROLE()));
     }
