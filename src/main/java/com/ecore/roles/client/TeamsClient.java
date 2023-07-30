@@ -12,6 +12,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.UUID;
 
+import static java.lang.String.format;
+
 @RequiredArgsConstructor
 @Component
 public class TeamsClient {
@@ -21,7 +23,7 @@ public class TeamsClient {
 
     public ResponseEntity<Team> getTeam(UUID id) {
         return restTemplate.exchange(
-                clientsConfigurationProperties.getTeamsApiHost() + "/" + id,
+                format("%s/%s", clientsConfigurationProperties.getTeamsApiHost(), id),
                 HttpMethod.GET,
                 null,
                 Team.class);

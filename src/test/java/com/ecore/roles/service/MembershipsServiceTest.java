@@ -1,28 +1,29 @@
 package com.ecore.roles.service;
 
-import com.ecore.roles.exception.InvalidArgumentException;
-import com.ecore.roles.exception.ResourceExistsException;
-import com.ecore.roles.model.Membership;
-import com.ecore.roles.repository.MembershipRepository;
-import com.ecore.roles.repository.RoleRepository;
-import com.ecore.roles.service.impl.MembershipsServiceImpl;
+import static com.ecore.roles.utils.TestData.DEFAULT_MEMBERSHIP;
+import static com.ecore.roles.utils.TestData.ORDINARY_CORAL_LYNX_TEAM;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
-import static com.ecore.roles.utils.TestData.DEFAULT_MEMBERSHIP;
-import static com.ecore.roles.utils.TestData.DEVELOPER_ROLE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
+import com.ecore.roles.exception.InvalidArgumentException;
+import com.ecore.roles.exception.ResourceExistsException;
+import com.ecore.roles.model.Membership;
+import com.ecore.roles.repository.MembershipRepository;
+import com.ecore.roles.repository.RoleRepository;
+import com.ecore.roles.service.impl.MembershipsServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class MembershipsServiceTest {
@@ -41,11 +42,14 @@ class MembershipsServiceTest {
     @Test
     public void shouldCreateMembership() {
         Membership expectedMembership = DEFAULT_MEMBERSHIP();
-        when(roleRepository.findById(expectedMembership.getRole().getId()))
-                .thenReturn(Optional.ofNullable(DEVELOPER_ROLE()));
+        when(roleRepository.existsById(expectedMembership.getRole().getId()))
+                .thenReturn(true);
         when(membershipRepository.findByUserIdAndTeamId(expectedMembership.getUserId(),
                 expectedMembership.getTeamId()))
                         .thenReturn(Optional.empty());
+        when(teamsService
+                .getTeam(expectedMembership.getTeamId()))
+                        .thenReturn(ORDINARY_CORAL_LYNX_TEAM());
         when(membershipRepository
                 .save(expectedMembership))
                         .thenReturn(expectedMembership);
@@ -54,7 +58,7 @@ class MembershipsServiceTest {
 
         assertNotNull(actualMembership);
         assertEquals(actualMembership, expectedMembership);
-        verify(roleRepository).findById(expectedMembership.getRole().getId());
+        verify(roleRepository).existsById(expectedMembership.getRole().getId());
     }
 
     @Test

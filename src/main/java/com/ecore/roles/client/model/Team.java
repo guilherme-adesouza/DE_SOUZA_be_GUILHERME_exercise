@@ -32,4 +32,8 @@ public class Team {
 
     @JsonProperty
     private List<UUID> teamMemberIds;
+
+    public boolean hasMember(UUID memberId) {
+        return teamLeadId.equals(memberId) || teamMemberIds.contains(memberId);
+    }
 }
