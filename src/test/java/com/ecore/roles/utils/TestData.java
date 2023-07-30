@@ -6,6 +6,7 @@ import com.ecore.roles.model.Membership;
 import com.ecore.roles.model.Role;
 import org.assertj.core.util.Lists;
 
+import java.util.List;
 import java.util.UUID;
 
 public class TestData {
@@ -20,9 +21,13 @@ public class TestData {
     public static final UUID TESTER_ROLE_UUID = UUID.fromString("37969e22-26f3-11ec-9621-0242ac130002");
 
     public static final UUID GIANNI_USER_UUID = UUID.fromString("fd282131-d8aa-4819-b0c8-d9e0bfb1b75c");
+    public static final UUID HAPPY_USER_UUID = UUID.fromString("fd282131-d8aa-4819-b0c8-fe3bfb1b75c");
 
     public static final UUID ORDINARY_CORAL_LYNX_TEAM_UUID =
             UUID.fromString("7676a4bf-adfe-415c-941b-1739af07039b");
+
+    public static final UUID TEAM_LIQUID_UUID =
+            UUID.fromString("7676a4bf-adfe-415c-941b-1739af07039a");
 
     public static final UUID DEFAULT_MEMBERSHIP_UUID =
             UUID.fromString("98de61a0-b9e3-11ec-8422-0242ac120002");
@@ -61,8 +66,21 @@ public class TestData {
         return team;
     }
 
+    public static Team TEAM_LIQUID() {
+        Team team = Team.builder()
+                .id(TEAM_LIQUID_UUID)
+                .name("Support Team").build();
+        team.setTeamLeadId(UUID_4);
+        team.setTeamMemberIds(Lists.list(GIANNI_USER_UUID));
+        return team;
+    }
+
     public static Team ORDINARY_CORAL_LYNX_TEAM() {
         return ORDINARY_CORAL_LYNX_TEAM(true);
+    }
+
+    public static List<Team> TEAMS() {
+        return Lists.list(ORDINARY_CORAL_LYNX_TEAM(), TEAM_LIQUID());
     }
 
     public static User GIANNI_USER(boolean full) {
@@ -80,6 +98,21 @@ public class TestData {
 
     public static User GIANNI_USER() {
         return GIANNI_USER(true);
+    }
+
+    public static User HAPPY_USER() {
+        User user = User.builder()
+                .id(HAPPY_USER_UUID)
+                .displayName("happyFeet").build();
+        user.setFirstName("Happy");
+        user.setLastName("Feet");
+        user.setAvatarUrl("https://cdn.fakercloud.com/avatars/happy_128.jpg");
+        user.setLocation("Antartica");
+        return user;
+    }
+
+    public static List<User> USERS() {
+        return Lists.list(GIANNI_USER(), HAPPY_USER());
     }
 
     public static Membership DEFAULT_MEMBERSHIP() {
