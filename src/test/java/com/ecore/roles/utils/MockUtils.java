@@ -60,4 +60,17 @@ public class MockUtils {
             e.printStackTrace();
         }
     }
+
+    public static void mockGetUsers(MockRestServiceServer mockServer, List<User> users) {
+        try {
+            mockServer.expect(ExpectedCount.manyTimes(), requestTo("http://test.com/users"))
+                    .andExpect(method(HttpMethod.GET))
+                    .andRespond(
+                            withStatus(HttpStatus.OK)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .body(new ObjectMapper().writeValueAsString(users)));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
 }

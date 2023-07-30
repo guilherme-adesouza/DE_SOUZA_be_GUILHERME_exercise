@@ -90,6 +90,19 @@ public class RestAssuredHelper {
                 .then());
     }
 
+    public static EcoreValidatableResponse getUsers() {
+        return sendRequest(when()
+                .get("/v1/users")
+                .then());
+    }
+
+    public static EcoreValidatableResponse getUserById(UUID userId) {
+        return sendRequest(given()
+                .pathParam("userId", userId)
+                .get("/v1/users/{userId}")
+                .then());
+    }
+
     private static RequestSpecification givenNullableBody(Object object) {
         RequestSpecification requestSpecification = given();
         if (object != null) {
